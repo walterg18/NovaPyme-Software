@@ -1,0 +1,25 @@
+=========================================
+MANUAL DE OPERACIONES: NOVAPYME
+=========================================
+
+Este documento sirve como tu guía de administración para la plataforma NovaPyme.
+
+1. OBJETIVO DEL PORTAL WEB
+El archivo "index.html" funciona como tu principal vendedor las 24 horas del día. Su objetivo no es cobrar inmediatamente, sino lograr que el dueño del salón deje su correo y teléfono para probar el demo por 7 días.
+
+2. CÓMO ENTREGAR EL SOFTWARE (EL DEMO)
+Actualmente la página web es una "Landing Page" (Página de captura). Cuando un cliente hace clic en "Probar 7 Días", tu proceso debería ser:
+- Recibir el WhatsApp o el Correo del cliente.
+- Hablar con ellos para conocer el tamaño de su salón.
+- Enviarles el enlace de instalación del software real o crearles el usuario en tu base de datos.
+- A los 5 días de la prueba, enviarles un mensaje preguntando cómo les ha ido.
+- Al día 7, enviar el enlace de pago de la suscripción (mensual o anual).
+
+3. CÓMO AGREGAR MÁS PROGRAMAS AL CATÁLOGO
+Si en el futuro decides vender un programa específico para "Petshops" (Peluquerías caninas) o "Minimarkets", deberás:
+- Ir al archivo "index.html".
+- Localizar la sección <div class="features-grid">.
+- Duplicar uno de los bloques de la tarjeta (card) y cambiarle el ícono, título y descripción.
+
+4. RECORDATORIO DE CRECIMIENTO
+Las pymes compran confianza. Siempre debes presentarte como un socio tecnológico que les va a facilitar la vida, no como un vendedor de computadoras.

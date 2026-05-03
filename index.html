@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaPyme - Soluciones Informáticas del Futuro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #060913;
+            --surface-color: rgba(20, 24, 44, 0.6);
+            --border-color: rgba(0, 240, 255, 0.2);
+            --primary-accent: #00f0ff;
+            --secondary-accent: #6a00ff;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --glass-blur: 16px;
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Inter', sans-serif; scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden;
+            background-image: radial-gradient(circle at 15% 50%, rgba(106, 0, 255, 0.15) 0%, transparent 50%),
+                              radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.15) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Nav */
+        header {
+            position: fixed; top: 0; width: 100%; height: 100px; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 5%; background: rgba(6, 9, 19, 0.7); backdrop-filter: blur(var(--glass-blur));
+            border-bottom: 1px solid var(--border-color); z-index: 1000;
+        }
+        .logo-container { display: flex; align-items: center; gap: 20px; }
+        .logo-img { height: 75px; width: auto; border-radius: 12px; box-shadow: 0 0 30px rgba(0, 240, 255, 0.8); background: white; padding: 7px; }
+        .brand-name { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.8rem; background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav ul { display: flex; list-style: none; gap: 30px; }
+        nav ul li a { color: var(--text-main); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        nav ul li a:hover { color: var(--primary-accent); }
+
+        /* Hero */
+        .hero { position: relative; min-height: 80vh; display: flex; align-items: center; padding: 0 5%; margin-top: 80px; text-align: center; justify-content: center; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url("assets/bg_salon.png") no-repeat center center/cover; opacity: 0.15; z-index: -1; mask-image: linear-gradient(to bottom, black 40%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%); }
+        .hero-content { max-width: 800px; z-index: 1; margin: 0 auto; }
+        .hero h1 { font-family: 'Outfit', sans-serif; font-size: 4.5rem; line-height: 1.1; margin-bottom: 25px; font-weight: 800; }
+        .hero h1 span { color: var(--primary-accent); }
+        .hero p { font-size: 1.2rem; color: var(--text-muted); margin: 0 auto 40px; line-height: 1.6; max-width: 650px; }
+
+        /* Animaciones Scroll (AOS personalizadas) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Trust Banner */
+        .trust-banner {
+            background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 30px 5%; text-align: center;
+        }
+        .trust-banner p { color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+        .trust-banner .logos { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; opacity: 0.5; color: white; }
+        .trust-banner .logos h4 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 600; display:flex; align-items:center; gap:8px;}
+
+        /* General Sections */
+        .catalog { padding: 60px 5%; position: relative; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .section-title { text-align: center; font-family: 'Outfit', sans-serif; font-size: 2.5rem; margin-bottom: 60px; color: white; }
+
+        /* Grid general de tarjetas */
+        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+
+        /* Opciones visuales base para tarjetas */
+        .card { background: var(--surface-color); border: 1px solid var(--border-color); padding: 40px 30px; border-radius: 16px; backdrop-filter: blur(var(--glass-blur)); text-align: center; transition: transform 0.4s, border-color 0.4s, box-shadow 0.4s; overflow: hidden; position: relative;}
+        .card:hover { transform: translateY(-10px); border-color: rgba(0, 240, 255, 0.5); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
+        .card-icon { font-size: 2.8rem; margin-bottom: 20px; }
+        .card h3 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 15px; color: white; }
+        .card p { color: var(--text-muted); line-height: 1.6; margin-bottom: 25px; }
+
+        /* Tarjetas de Precios Específicas */
+        .price-card { padding: 50px 30px; }
+        .price-card.featured { border-color: var(--primary-accent); background: linear-gradient(180deg, rgba(0, 240, 255, 0.05) 0%, rgba(20, 24, 44, 0.6) 100%); }
+        .price-card h3 { font-size: 1.8rem; margin-bottom: 10px; }
+        .price-card .price { font-size: 2.5rem; font-family: 'Outfit', sans-serif; color: var(--primary-accent); font-weight: bold; margin-bottom: 20px; }
+        .price-card ul { list-style: none; text-align: left; margin-bottom: 30px; }
+        .price-card ul li { color: var(--text-muted); margin-bottom: 12px; font-size: 0.95rem; }
+        .price-card ul li::before { content: '✔️'; color: var(--primary-accent); margin-right: 10px; font-size: 0.8rem; }
+        
+        /* Pasos (Cómo Funciona) */
+        .step-container { display: flex; justify-content: center; align-items: start; gap: 40px; margin-top: 40px; flex-wrap: wrap; }
+        .step { flex: 1; min-width: 250px; text-align: center; }
+        .step-number { width: 60px; height: 60px; background: linear-gradient(45deg, var(--secondary-accent), var(--primary-accent)); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-family: 'Outfit', font-weight: bold; color: white; margin: 0 auto 20px; box-shadow: 0 0 20px rgba(0, 240, 255, 0.4); }
+
+        .btn-primary { display: inline-block; padding: 14px 30px; background: linear-gradient(90deg, var(--secondary-accent), var(--primary-accent)); color: white; text-decoration: none; font-weight: 600; border-radius: 8px; border: none; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 20px rgba(0, 240, 255, 0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0, 240, 255, 0.5); }
+
+        /* FAQ Details Accordion */
+        details { background: var(--surface-color); border: 1px solid var(--border-color); padding: 20px; margin-bottom: 15px; border-radius: 12px; transition: all 0.3s ease; }
+        details[open] { border-color: var(--primary-accent); box-shadow: 0 5px 20px rgba(0, 240, 255, 0.1); }
+        summary { font-size: 1.2rem; color: white; font-weight: 600; cursor: pointer; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: '+'; color: var(--primary-accent); font-size: 1.5rem; }
+        details[open] summary::after { content: '-'; }
+
+        /* Footer */
+        footer { background: #03040a; border-top: 1px solid var(--border-color); text-align: left; padding: 60px 8% 20px; }
+        .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; margin-bottom: 40px; }
+        .footer-col h4 { color: white; margin-bottom: 15px; font-family: 'Outfit', sans-serif; font-size: 1.2rem; }
+        .footer-col p, .footer-col a { color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 8px; font-size: 0.95rem; transition: 0.3s; }
+        .footer-col a:hover { color: var(--primary-accent); }
+
+        /* Float WhatsApp */
+        .float-wa {
+            position: fixed; width: 60px; height: 60px; bottom: 40px; right: 40px;
+            background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center;
+            font-size: 30px; box-shadow: 0px 5px 20px rgba(37, 211, 102, 0.4);
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .float-wa:hover { transform: scale(1.1); box-shadow: 0px 8px 25px rgba(37, 211, 102, 0.6); }
+
+        /* Modal Full Screen */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content-wrapper { position: relative; width: 95%; max-width: 1200px; height: 90vh; border-radius: 20px; overflow: hidden; display: flex; box-shadow: 0 0 50px rgba(0, 240, 255, 0.2); border: 1px solid var(--border-color); }
+        .modal-bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-position: center; background-size: cover; z-index: 0; opacity: 0.5; transition: 0.4s ease; }
+        .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(6,9,19,0.95) 0%, rgba(6,9,19,0.4) 100%); z-index: 1; }
+        .close-modal { position: absolute; top: 20px; right: 25px; font-size: 2.5rem; color: white; cursor: pointer; z-index: 10; }
+        .modal-inner { position: relative; z-index: 2; display: flex; width: 100%; height: 100%; }
+        .modal-info { flex: 1.2; padding: 50px; display: flex; flex-direction: column; justify-content: center; }
+        .modal-info h2 { font-family: 'Outfit', sans-serif; font-size: 3.5rem; line-height: 1.1; color: white; margin-bottom: 20px; }
+        .modal-info h2 span { color: var(--primary-accent); }
+        .modal-info p { color: var(--text-muted); font-size: 1.2rem; line-height: 1.6; max-width: 90%; }
+        
+        .modal-form-area { flex: 1; padding: 40px; display: flex; align-items: center; justify-content: center; }
+        .glass-form { background: var(--surface-color); border: 1px solid var(--border-color); padding: 40px; border-radius: 16px; backdrop-filter: blur(25px); width: 100%; max-width: 450px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .glass-form h4 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: white; margin-bottom: 20px; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted); }
+        .form-group input { width: 100%; padding: 12px 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-family: 'Inter', sans-serif; }
+        .form-group input:focus { outline: none; border-color: var(--primary-accent); }
+        .row-2 { display: flex; gap: 15px; }
+        .row-2 .form-group { flex: 1; }
+        
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="assets/logo.png" class="logo-img" alt="NovaPyme">
+            <div class="brand-name">NOVA<span>PYME</span></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#comofunciona">Cómo Funciona</a></li>
+                <li><a href="#soluciones">Soluciones</a></li>
+                <li><a href="#precios">Precios</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Automatización <span>Inteligente</span> Pyme</h1>
+                <p>Nuestra plataforma te enseña el futuro. Observa cómo nuestras herramientas diseñadas a medida logran incrementar tu rentabilidad y darte el control total.</p>
+                <br>
+                <a href="#soluciones" class="btn-primary">Explorar Demos</a>
+            </div>
+        </section>
+
+        <!-- TRUST BANNER -->
+        <div class="trust-banner reveal">
+            <p>Más de 500 negocios respaldan nuestros sistemas</p>
+            <div class="logos">
+                <h4>⌘ StylePro</h4>
+                <h4>✦ NailsTech</h4>
+                <h4>♦ BarberHub</h4>
+                <h4>⌬ SalonManager</h4>
+            </div>
+        </div>
+
+        <!-- SECCIÓN "CÓMO FUNCIONA" -->
+        <section id="comofunciona" class="catalog">
+            <h2 class="section-title reveal">El camino a la automatización</h2>
+            <div class="step-container">
+                <div class="step reveal">
+                    <div class="step-number">1</div>
+                    <h3 style="color:white; margin-bottom:10px; font-family:'Outfit', sans-serif;">Pide un Tour</h3>
+                    <p style="color:var(--text-muted); font-size:0.95rem;">Selecciona tu rubro y llena el formulario de contacto para acceder a nuestra vitrina interactiva gratuita.</p>
+                </div>
+                <div class="step reveal" style="transition-delay: 0.1s;">
+                    <div class="step-number">2</div>
+                    <h3 style="color:white; margin-bottom:10px; font-family:'Outfit', sans-serif;">Observa la Magia</h3>
+                    <p style="color:var(--text-muted); font-size:0.95rem;">Mira cómo funciona nuestro sistema por dentro. Haz clic en nuestro simulador y sorpréndete de todo lo que es capaz de hacer.</p>
+                </div>
+                <div class="step reveal" style="transition-delay: 0.2s;">
+                    <div class="step-number">3</div>
+                    <h3 style="color:white; margin-bottom:10px; font-family:'Outfit', sans-serif;">Te Instalamos el Real</h3>
+                    <p style="color:var(--text-muted); font-size:0.95rem;">Cuando decidas que tu negocio merece modernizarse, nuestro equipo técnico te instalará el software verdadero para controlar tu dinero.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATALOGO -->
+        <section id="soluciones" class="catalog" style="background: linear-gradient(180deg, rgba(6,9,19,0) 0%, rgba(20,24,44,0.3) 100%); border-bottom: none;">
+            <h2 class="section-title reveal">Vitrina de Interactiva</h2>
+            <div class="catalog-grid">
+                <div class="card reveal">
+                    <div class="card-icon">💻</div>
+                    <h3>Beauty Cloud</h3>
+                    <p>Ideal para Salones de Belleza. Mira cómo controlaría tu agenda, comisiones e inventario sin mover un dedo.</p>
+                    <button class="btn-primary" onclick="abrirModal('salon')">Explorar Demo Salón</button>
+                </div>
+                <div class="card reveal" style="transition-delay: 0.1s;">
+                    <div class="card-icon">💈</div>
+                    <h3>Barber Track</h3>
+                    <p>Visualiza el rápido sistema de tickets y manejo de turnos diseñado exclusivamente para acelerar tu Barbería.</p>
+                    <button class="btn-primary" onclick="abrirModal('barber')">Explorar Demo Barbería</button>
+                </div>
+                <div class="card reveal" style="transition-delay: 0.2s;">
+                    <div class="card-icon">💅</div>
+                    <h3>Nail Center Pro</h3>
+                    <p>Conoce la agenda fácil de combos y enamórate del sistema de alertas tempranas de pérdida de esmaltes.</p>
+                    <button class="btn-primary" onclick="abrirModal('nails')">Explorar Demo Uñas</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- GARANTÍAS (WHY US) -->
+        <section id="garantias" class="catalog" style="background: linear-gradient(0deg, rgba(6,9,19,0) 0%, rgba(20,24,44,0.3) 100%);">
+            <h2 class="section-title reveal">Tu tranquilidad en el sistema real</h2>
+            <div class="catalog-grid">
+                <div class="card reveal">
+                    <div class="card-icon">🛡️</div>
+                    <h3>Seguridad Bancaria</h3>
+                    <p>Protegemos tu lista de clientes y ganancias con encriptación militar. Tu información está sellada por estricta privacidad.</p>
+                </div>
+                <div class="card reveal" style="transition-delay: 0.1s;">
+                    <div class="card-icon">☁️</div>
+                    <h3>Respaldo en la Nube</h3>
+                    <p>Si la computadora de tu negocio sufre un daño o apagón, no pierdes absolutamente nada. Tu base se guarda sola cada 5 minutos.</p>
+                </div>
+                <div class="card reveal" style="transition-delay: 0.2s;">
+                    <div class="card-icon">📞</div>
+                    <h3>Soporte Humano 24/7</h3>
+                    <p>No hablamos con robots. Si tienes una emergencia un sábado en la noche trabajando, nuestro equipo técnico responderá al instante.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIOS (SOCIAL PROOF) -->
+        <section id="testimonios" class="catalog">
+            <h2 class="section-title reveal">Negocios de Éxito en R.D.</h2>
+            <div class="catalog-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="card reveal" style="text-align: left; background: rgba(0,0,0,0.3);">
+                    <div style="color: #ffd700; font-size:1.5rem; margin-bottom:15px;">★★★★★</div>
+                    <p style="color: white; font-style: italic;">"Desde que compramos la licencia completa el descuadre de caja bajó a cero. Verla primero en el demo gratuito fue la mejor elección para darnos confianza."</p>
+                    <h4 style="color: var(--primary-accent); margin-top: 20px;">Miguel A. - D'Boys BarberShop</h4>
+                </div>
+                <div class="card reveal" style="text-align: left; background: rgba(0,0,0,0.3); transition-delay: 0.1s;">
+                    <div style="color: #ffd700; font-size:1.5rem; margin-bottom:15px;">★★★★★</div>
+                    <p style="color: white; font-style: italic;">"El control del inventario por la aplicación es perfecto. Vimos el tour y en menos de dos días ya teníamos el programa original instalado."</p>
+                    <h4 style="color: var(--primary-accent); margin-top: 20px;">Laura S. - L&C Nail Bar</h4>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRECIOS (PRICING TABLE) -->
+        <section id="precios" class="catalog">
+            <h2 class="section-title reveal">Instalación y Licencias</h2>
+            <div class="catalog-grid">
+                
+                <div class="card price-card reveal">
+                    <h3>Descubrimiento</h3>
+                    <div class="price">Demo</div>
+                    <p style="margin-bottom: 25px;">Para quienes desean ver cómo se usa la plataforma en pantalla simulada.</p>
+                    <ul>
+                        <li>Simulador interactivo del sistema.</li>
+                        <li>Verificación de las interfaces.</li>
+                        <li>Entendimiento del flujo de cajas.</li>
+                        <li>No guarda los datos.</li>
+                    </ul>
+                    <button class="btn-primary" style="background: transparent; border: 1px solid var(--primary-accent); color: white; width:100%; box-shadow:none;" onclick="document.getElementById('soluciones').scrollIntoView();">Acceder al Simulador</button>
+                </div>
+
+                <div class="card price-card featured reveal" style="transition-delay: 0.1s;">
+                    <h3 style="color: var(--primary-accent);">Licencia Pro</h3>
+                    <div class="price">RD$ 2,500 <span style="font-size:1rem; color:var(--text-muted); font-weight:normal;">/mes</span></div>
+                    <p style="margin-bottom: 25px;">La plataforma real implementada directamente en el ordenador de tu local.</p>
+                    <ul>
+                        <li>Tu propia base de datos 100% activa.</li>
+                        <li>Soporte de Equipo VIP.</li>
+                        <li>Ingresa a tu equipo.</li>
+                        <li>Toma de comisiones activas.</li>
+                        <li>Integración de Impresoras Remota.</li>
+                    </ul>
+                    <button class="btn-primary" style="width:100%;" onclick="alert('Una vez mires nuestro Demo interactivo, solicita la instalación llamando a soporte.');">Instalar Programa Real</button>
+                </div>
+
+                <div class="card price-card reveal" style="transition-delay: 0.2s;">
+                    <h3>Corporativo</h3>
+                    <div class="price">A Medida</div>
+                    <p style="margin-bottom: 25px;">Para negocios con múltiples sucursales que exigen métricas masivas.</p>
+                    <ul>
+                        <li>Sistema escalable a N sucursales.</li>
+                        <li>Reportes analíticos mensuales.</li>
+                        <li>Usuarios ilimitados.</li>
+                        <li>Integración de WhatsApp para alertas.</li>
+                    </ul>
+                    <button class="btn-primary" style="background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); width:100%; box-shadow:none;" onclick="alert('Contacta al equipo de ventas para cotizar tu sucursal.');">Contactar Ventas</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FAQ (PREGUNTAS FRECUENTES) -->
+        <section id="faq" class="catalog">
+            <h2 class="section-title reveal">Preguntas Frecuentes</h2>
+            <div style="max-width: 800px; margin: 0 auto;" class="reveal">
+                <details>
+                    <summary>¿Qué es exactamente la Vitrina Simuladora?</summary>
+                    <p style="color:var(--text-muted); margin-top:15px; line-height:1.6;">Es un visualizador tecnológico para que puedas hacer clic y ojear todo nuestro programa sin dañar ninguna base de datos real. Te sirve para conocerlo ante de comprar.</p>
+                </details>
+                <details>
+                    <summary>¿Necesito ser un genio para usar el programa real?</summary>
+                    <p style="color:var(--text-muted); margin-top:15px; line-height:1.6;">No necesitas saber nada de computadoras. Todo el sistema está programado para ser tan fácil de usar como tu propio WhatsApp.</p>
+                </details>
+                <details>
+                    <summary>¿Cuanto tardan en instalarme la versión oficial en mi negocio?</summary>
+                    <p style="color:var(--text-muted); margin-top:15px; line-height:1.6;">Menos de 30 minutos. Nos conectamos contigo por computadora usando programas como TeamViewer o AnyDesk, lo instalamos y creamos tus usuarios rápidamente luego del pago.</p>
+                </details>
+            </div>
+        </section>
+
+        <!-- CTA FINAL -->
+        <section class="reveal" style="padding: 100px 5%; text-align: center; background: linear-gradient(135deg, var(--secondary-accent) 0%, var(--primary-accent) 100%);">
+            <h2 style="font-family:'Outfit', sans-serif; font-size: 3.5rem; color: white; margin-bottom: 20px; font-weight: 800; max-width: 900px; margin-left: auto; margin-right: auto; line-height: 1.1;">Automatiza sin complicaciones tecnológicas</h2>
+            <p style="color: rgba(255,255,255,0.9); font-size: 1.2rem; margin-bottom: 40px;">Únete a nuestra gira guiada por el sistema y convéncete con tus propios ojos.</p>
+            <button onclick="document.getElementById('soluciones').scrollIntoView();" class="btn-primary" style="background: white; color: var(--secondary-accent); font-size: 1.1rem; padding: 16px 40px;">Entrar a la Vitrina Tour</button>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col" style="max-width:300px;">
+                <h4 style="font-size:1.5rem; margin-bottom:20px;">Nova<span style="color:var(--primary-accent);">Pyme</span></h4>
+                <p>La plataforma tecnológica líder para la gestión y rentabilidad de microempresas y salones en República Dominicana.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navegación</h4>
+                <a href="#soluciones">Catálogo de Software</a>
+                <a href="#precios">Nuestros Precios</a>
+                <a href="#testimonios">Casos de Éxito</a>
+                <a href="#faq">Preguntas Frecuentes</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal / Corporativo</h4>
+                <a href="#">Términos y Condiciones</a>
+                <a href="#">Política de Privacidad</a>
+                <a href="#">Desarrollo a Medida</a>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <p>🏢 Santo Domingo, República Dominicana.</p>
+                <p>📩 soporte@novapyme.com</p>
+                <p>📞 +1 (809) 000-0000</p>
+            </div>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,0.1); text-align:center; padding-top:25px;">
+            <p>&copy; 2026 NovaPyme Inc. Todos los derechos registrados sobre la marca y el software.</p>
+        </div>
+    </footer>
+
+    <!-- BOTON FLOTANTE WHATSAPP -->
+    <a href="https://wa.me/18090000000" class="float-wa" target="_blank" title="Chatea con Soporte">
+        <svg viewBox="0 0 32 32" width="35" height="35" fill="white">
+            <path d="M16.1 2.9C8.8 2.9 2.9 8.8 2.9 16.1c0 2.4.6 4.6 1.7 6.6L3 29.1l6.6-1.7c1.9 1 4.1 1.6 6.5 1.6 7.3 0 13.2-5.9 13.2-13.2S23.4 2.9 16.1 2.9zM24 21.8c-.3.9-1.8 1.7-2.6 1.8-.8.1-1.8.3-3.6-.4-2.1-.8-4.5-2.8-5.7-4.4C10.9 17.2 9.8 15 9.8 13.2c0-1.8 1-2.7 1.4-3.2.4-.4.9-.5 1.2-.5h.9c.3 0 .7-.1 1.1.8.4 1 1.3 3.3 1.4 3.7.1.4.2.8-.1 1.2-.2.4-.4.6-.7.9-.3.3-.6.6-.9.9-.3.3-.6.6-.2 1.2.4.6 1.3 1.7 2.2 2.5 1.2 1 2.2 1.4 2.8 1.6.6.2 1 .2 1.4-.4.4-.6 1.7-2 2.2-2.7.4-.7 1-.6 1.6-.3 2.1 1 3.5 1.6 3.8 1.8s.6.3.7.5c.2.2.2 1 .1 1.9z"/>
+        </svg>
+    </a>
+
+    <!-- Ventana Modal de Prueba -->
+    <div id="trialModal" class="modal">
+        <div class="modal-content-wrapper">
+            <div id="modalBgImage" class="modal-bg-img"></div>
+            <div class="modal-overlay"></div>
+            <span class="close-modal" onclick="cerrarModal()">&times;</span>
+            <div class="modal-inner">
+                <div class="modal-info">
+                    <h2 id="modalTitle" style="font-size: 2.8rem; line-height: 1.2;">Revoluciona tu <span>Negocio</span></h2>
+                    <p id="modalDesc">Accede a nuestra vitrina interactiva y mira cómo controlaría tu agenda, comisiones e inventario sin mover un dedo.</p>
+                </div>
+                <div class="modal-form-area">
+                    <div class="glass-form">
+                        <h4>Agendar Tour de Sistema</h4>
+                        <div class="form-group"><label>Nombre de la Empresa o Pyme</label><input type="text" placeholder="Ej. D'Luis BarberShop" required></div>
+                        <div class="form-group"><label>Nombre Completo (Propietario)</label><input type="text" placeholder="Tu nombre" required></div>
+                        <div class="form-group"><label>Teléfono (WhatsApp)</label><input type="tel" placeholder="809-xxx-xxxx" required></div>
+                        <div class="row-2">
+                            <div class="form-group"><label>Ciudad</label><input type="text" placeholder="Ej. Distrito Nacional" required></div>
+                            <div class="form-group"><label>Provincia</label><input type="text" placeholder="Ej. Santo Domingo" required></div>
+                        </div>
+                        <div class="row-2">
+                            <div class="form-group"><label>Calle</label><input type="text" placeholder="Nombre de la calle" required></div>
+                            <div class="form-group"><label>Número Local</label><input type="text" placeholder="# Local" required></div>
+                        </div>
+                        <div class="form-group"><label>País</label><input type="text" value="República Dominicana" disabled style="background:rgba(0,0,0,0.5); cursor: not-allowed; color:#00f0ff; border-style:dashed;"></div>
+                        <button class="btn-primary" style="width: 100%; margin-top: 15px;" onclick="enviarFormulario()">Acceder al Tour Simulado</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Logica del Modal y Router
+        let currentDemo = '';
+        const bd = {
+            'salon': { tit: 'Tour <span>Beauty Cloud</span>', des: 'Explora nuestra interfaz inteligente y descubre los reportes estadísticos y manejo de personal que harán despegar tu Salón.', img: 'url("assets/bg_salon.png")' },
+            'barber': { tit: 'Tour <span>Barber Track</span>', des: 'Mira en tiempo real cómo lucen los perfiles de los barberos y siente la fluidez visual de nuestra caja registradora.', img: 'url("assets/bg_barber.png")' },
+            'nails': { tit: 'Tour <span>Nail Center Pro</span>', des: 'Navega libremente por nuestro calendario visual y comprueba lo sencillo que será vender tus acrílicos sin desfases.', img: 'url("assets/bg_salon.png")' }
+        };
+        function abrirModal(tipo) {
+            currentDemo = tipo;
+            document.getElementById('modalTitle').innerHTML = bd[tipo].tit;
+            document.getElementById('modalDesc').innerText = bd[tipo].des;
+            document.getElementById('modalBgImage').style.backgroundImage = bd[tipo].img;
+            document.getElementById('trialModal').style.display = 'flex';
+        }
+        function cerrarModal() { document.getElementById('trialModal').style.display = 'none'; }
+        function enviarFormulario() { 
+            alert("¡Usuario Demo Registrado! Cargando el programa..."); 
+            
+            let carpetaPyme = '';
+            if (currentDemo === 'salon') carpetaPyme = 'demo_salon';
+            if (currentDemo === 'barber') carpetaPyme = 'demo_peluqueria';
+            if (currentDemo === 'nails') carpetaPyme = 'demo_unas';
+            
+            window.location.href = carpetaPyme + '/index.html'; 
+        }
+
+        // Mapeo e Interseccion Observer para Animaciones en Scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach((el) => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

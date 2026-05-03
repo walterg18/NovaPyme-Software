@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barber Track - Inventario</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/theme.css">
+    <script src="js/auth.js"></script>
+    <script>verificarSeguridad();</script>
+</head>
+<body class="bg-dark">
+
+    <div class="app-container">
+        <!-- BARRA LATERAL (MENÚ) -->
+        <aside class="sidebar">
+            <h2 class="brand-logo" style="font-size:1.5rem; text-align:center; margin-bottom: 40px;">💈 Barber<span>Track</span></h2>
+            
+            <div style="padding: 0 20px;">
+                <div class="form-group" style="cursor:pointer; padding: 15px; border-radius: 8px; opacity:0.6; transition:0.3s;" onclick="window.location.href='index.html'" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+                    Control de Caja
+                </div>
+                <div class="form-group" style="cursor:pointer; background:rgba(0,255,136,0.1); padding: 15px; border-radius: 8px; border-left: 3px solid var(--primary);">
+                    <strong style="color:var(--primary);">Almacén (Kardex)</strong>
+                </div>
+                <div class="form-group" style="cursor:pointer; padding: 15px; border-radius: 8px; color:var(--secondary);" onclick="cerrarSesion()">
+                    Cerrar Sesión
+                </div>
+            </div>
+        </aside>
+
+        <!-- PANEL CENTRAL -->
+        <main class="main-view">
+            <nav class="top-nav">
+                <h3 style="font-weight: 500; color:var(--text-muted);">Módulo Antimermas <span style="font-size:0.8rem; background:rgba(0,255,0,0.1); padding:4px 8px; border-radius:5px; margin-left:10px;">🟢 Motor Inteligente</span></h3>
+                <div style="font-weight:bold;">Administración</div>
+            </nav>
+
+            <div class="view-area">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 30px;">
+                    <div>
+                        <h1 style="font-family:'Outfit'; font-size: 2.2rem;">Kardex de Inventario</h1>
+                        <p style="color:var(--text-muted); font-size:0.9rem;">Los artículos vendidos en caja se descuentan automáticamente del almacén.</p>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+                    <!-- LISTA DE ALMACÉN -->
+                    <div class="glass-panel" style="padding: 25px;">
+                        <h3 style="margin-bottom: 20px;">Artículos Registrados</h3>
+                        <table class="table-glass">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Unidades Restantes</th>
+                                    <th>Punto Crítico</th>
+                                    <th>Estado Lógico</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaDeInventario">
+                                <!-- Filas JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- REABASTECER INVENTARIO -->
+                    <div class="glass-panel" style="padding: 25px; border-color:var(--border);">
+                        <h3 style="margin-bottom: 20px; color:#fff;">+ Reabastecer Local</h3>
+                        <form id="formReabastecer">
+                            <div class="form-group">
+                                <label>Producto Comprado</label>
+                                <select id="inputProductoReab" required>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Unidades Recibidas</label>
+                                <input type="number" id="inputCantidadReab" placeholder="Ej. 12" min="1" required>
+                            </div>
+                            <button type="submit" class="btn-primary w-100">Sumar al Almacén</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Motores JS -->
+    <script src="js/db_emulator.js"></script>
+    <script src="js/inventory.js"></script>
+</body>
+</html>

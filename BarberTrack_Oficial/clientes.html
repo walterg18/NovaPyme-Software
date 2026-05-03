@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barber Track - CRM VIP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/theme.css">
+    <script src="js/auth.js"></script>
+    <script>verificarSeguridad();</script>
+</head>
+<body class="bg-dark">
+
+    <div class="app-container">
+        <!-- BARRA LATERAL (MENÚ) -->
+        <aside class="sidebar">
+            <h2 class="brand-logo" style="font-size:1.5rem; text-align:center; margin-bottom: 40px;">💈 Barber<span>Track</span></h2>
+            
+            <div style="padding: 0 20px;">
+                <div class="form-group" style="cursor:pointer; padding: 15px; border-radius: 8px; opacity:0.6; transition:0.3s;" onclick="window.location.href='index.html'" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+                    Control de Caja
+                </div>
+                <div class="form-group" style="cursor:pointer; padding: 15px; border-radius: 8px; opacity:0.6; transition:0.3s;" onclick="window.location.href='inventario.html'" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+                    Inventario (Kardex)
+                </div>
+                <div class="form-group" style="cursor:pointer; background:rgba(0,255,136,0.1); padding: 15px; border-radius: 8px; border-left: 3px solid var(--primary);">
+                    <strong style="color:var(--primary);">Clientes VIP (CRM)</strong>
+                </div>
+                <div class="form-group" style="cursor:pointer; padding: 15px; border-radius: 8px; color:var(--secondary);" onclick="cerrarSesion()">
+                    Cerrar Sesión
+                </div>
+            </div>
+        </aside>
+
+        <!-- PANEL CENTRAL -->
+        <main class="main-view">
+            <nav class="top-nav">
+                <h3 style="font-weight: 500; color:var(--text-muted);">Programa de Fidelización <span style="font-size:0.8rem; background:rgba(255,165,0,0.1); color: orange; padding:4px 8px; border-radius:5px; margin-left:10px;">👑 VIP Mode</span></h3>
+                <div style="font-weight:bold;">Administración</div>
+            </nav>
+
+            <div class="view-area">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 30px;">
+                    <div>
+                        <h1 style="font-family:'Outfit'; font-size: 2.2rem;">Directorio de Clientes</h1>
+                        <p style="color:var(--text-muted); font-size:0.9rem;">Busca un cliente para ver sus notas médicas-estéticas o dale de alta.</p>
+                    </div>
+                    <button class="btn-primary" onclick="document.getElementById('modalNuevoCliente').style.display='flex'">+ Nuevo Cliente</button>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 30px;">
+                    <input type="text" id="buscadorCRM" placeholder="🔍 Buscar cliente por número de teléfono o nombre..." style="border-width:2px; font-size: 1.1rem; padding: 15px;" onkeyup="renderearClientes()">
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 20px;" id="gridClientes">
+                    <!-- Tarjetas CRM en JS -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL NUEVO CLIENTE -->
+    <div id="modalNuevoCliente" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
+        <div class="glass-panel" style="width: 450px;">
+            <h3 style="color:var(--primary); margin-bottom:20px;">Crear Ficha Cliente</h3>
+            <form id="formNuevoCLiente">
+                <div class="form-group"><label>Nombre Completo</label><input type="text" id="cNombre" required></div>
+                <div class="form-group"><label>Teléfono (WhatsApp)</label><input type="text" id="cTelefono" placeholder="Ej. 809-555-5555" required></div>
+                <div class="form-group"><label>Notas Visibles (Secretos de Corte)</label><input type="text" id="cNotas" placeholder="Ej. Corte con acero 0 a los lados, sin gelatina." required></div>
+                <div style="display:flex; gap:10px; margin-top:20px;">
+                    <button type="submit" class="btn-primary w-100">Guardar Ficha</button>
+                    <button type="button" class="btn-danger w-100" onclick="document.getElementById('modalNuevoCliente').style.display='none'">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Motores JS -->
+    <script src="js/db_emulator.js"></script>
+    <script src="js/crm.js"></script>
+</body>
+</html>

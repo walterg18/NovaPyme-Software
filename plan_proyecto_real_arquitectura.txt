@@ -1,0 +1,36 @@
+========================================================================
+PLAN DE ARQUITECTURA TÉCNICA: DESARROLLO DE SOFTWARE REAL
+========================================================================
+
+Entendido 100%. Descartamos por completo los simuladores. Actuaremos como una verdadera firma de Ingeniería de Software y programaremos el SISTEMA OPERATIVO REAL y funcional desde cero. 
+
+Dado que construiremos un programa que procesará datos financieros e información real (nombres, inventario, cálculos de pago), debemos definir el motor antes de escribir la primera letra de código.
+
+## 1. El Reto Tecnológico: ¿Dónde vivirán los Datos de tus clientes?
+Cualquier "Proyecto Real" necesita una Base de Datos inteligente. Tenemos dos caminos, y necesito que escojas a nivel de negocios:
+
+### OPCIÓN A: Motor Local (La vía rápida e independiente)
+- **Tecnología:** HTML Profesional, CSS, JavaScript Modular y una Base de Datos en el navegador (IndexedDB o LocalStorage).
+- **Ventajas:** No pide internet y es 100% gratis de operar. Yo te programo todos los botones reales (Agregar Clientes, Cobrar, Agendar) y todo se guarda genuinamente en la computadora del salón o la barbería. Podemos terminar una versión completísima en uno o dos días, y estará lista para instalar y vender de inmediato en las PCs de tus clientes.
+- **Desventaja:** Si la dueña del salón se le daña la computadora, la información se pierde (tendríamos que programar luego un botón para exportar backups en Excel). No pueden ver la información desde celulares si el cajero lo registra en la PC.
+
+### OPCIÓN B: La Nube (Nivel Startup de Silicon Valley)
+- **Tecnología:** React.js / Node.js y Motores Google Cloud o Firebase.
+- **Ventajas:** Información sincronizada 24/7. El barbero cobra en su caja y el dueño de la peluquería ve el aumento de la ganancia desde su celular simultáneamente estando en su casa.
+- **Desventajas:** Tarda muchísimo más tiempo en programarse (semanas). Requerirá que tú configures cuentas de Google y tarjetas (aunque hay servidores gratuitos temporales) e instalaremos comandos complejos en la computadora (NodeJS npm) para levantar servidores.
+
+---
+
+## 2. Los Componentes del Proyecto Real
+Sin importar la Opción (A o B), para que me evalúes mi destreza técnica, comenzaré programando archivos independientes reales:
+1. "login.html": Seguridad y acceso.
+2. "motor_db.js": El cerebro que inserta y elimina registros permanentemente.
+3. "caja_registradora.js": Control de facturación.
+4. "inventario.js": Restas automáticas de existencias y cálculos.
+
+========================================================================
+DECISIÓN REQUERIDA PARA INICIAR:
+Tú eres el CEO y la lógica del negocio está en tus manos. Por favor dímelo por chat:
+
+PREGUNTA 1: ¿Por cuál empezamos? ¿La Opción A (Arranque potente y seguro, listo en horas para PCs locales) o quieres que encienda los motores pesados de la Opción B (Nube Sincronizada y uso de servidores)?
+PREGUNTA 2: ¿Cuál rama de negocio quieres que te desarrolle primero de manera real de principio a fin? ¿Beauty Cloud (Salón), Barber Track (Peluquería), o el Nail Center Pro?

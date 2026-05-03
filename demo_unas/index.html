@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nail Center Pro - Simulador</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #120b12; /* Tono morado oscuro */
+            --sidebar-bg: #1c111c;
+            --surface: #261625;
+            --primary: #ff007f; /* Rosa Neon */
+            --secondary: #9d00ff; /* Morado Fuerte */
+            --text-main: #ffffff;
+            --text-muted: #a894a8;
+            --border: #382436;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+
+        /* Loader */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
+        .spinner { width: 50px; height: 50px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Sidebar */
+        .sidebar { width: 260px; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 0; }
+        .brand { font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; text-align: center; margin-bottom: 40px; color: white; display: flex; align-items: center; justify-content: center; gap:10px; }
+        .brand span { color: var(--primary); }
+        .nav-item { padding: 15px 30px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 15px; font-weight: 500; transition: 0.3s; border-left: 3px solid transparent; }
+        .nav-item:hover, .nav-item.active { background: rgba(255, 0, 127, 0.05); color: var(--text-main); border-left: 3px solid var(--primary); }
+
+        /* Topbar & Content */
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; background-image: radial-gradient(circle at 80% 80%, rgba(255, 0, 127, 0.05) 0%, transparent 40%); }
+        .topbar { height: 80px; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; }
+        .dashboard-area { padding: 40px; overflow-y: auto; flex: 1; }
+        .header-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .header-title h2 { font-family: 'Outfit', sans-serif; font-size: 2rem; letter-spacing: -0.5px;}
+        
+        .btn-new { background: linear-gradient(90deg, var(--secondary), var(--primary)); color: white; font-weight: 600; padding: 12px 25px; border-radius: 8px; border: none; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 20px rgba(255,0,127,0.3); }
+        .btn-new:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255,0,127,0.5); }
+
+        /* Matrics */
+        .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
+        .metric-card { background: var(--surface); border: 1px solid var(--border); padding: 25px; border-radius: 12px; }
+        .metric-card h4 { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px; font-weight: 500; }
+        .metric-card h3 { font-family: 'Outfit', sans-serif; font-size: 2.2rem; margin-bottom: 5px; }
+
+        /* Paneles */
+        .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 20px; }
+        .panel h3 { font-family: 'Outfit', sans-serif; margin-bottom: 20px; color: white; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding-bottom: 15px; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+        td { padding: 15px 0; border-bottom: 1px solid var(--border); color: #ddd; }
+
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); align-items:center; justify-content:center; }
+        .modal-content { background: var(--surface); padding: 30px; border-radius: 16px; width: 450px; border: 1px solid var(--primary); }
+        .modal input, .modal select { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(0,0,0,0.3); color: white; border: 1px solid var(--border); border-radius: 8px; font-family: 'Inter'; }
+    </style>
+</head>
+<body>
+    <div id="loader"><div class="spinner"></div><h3 style="color:white; font-family:'Outfit'">Diseñando Entorno de Uñas...</h3></div>
+    
+    <div class="sidebar">
+        <div class="brand">💅 NailCenter<span>Pro</span></div>
+        <div class="nav-item active">📅 Agenda Múltiple</div>
+        <div class="nav-item">💅 Menú de Combos</div>
+        <div class="nav-item">🧪 Control de Químicos</div>
+        <div class="nav-item">💎 Clientas VIP</div>
+    </div>
+
+    <div class="main-content">
+        <div class="topbar">
+            <div style="font-weight: 500; color:var(--text-muted);">Visualizador Simulador | Tour de Funciones</div>
+            <div style="font-weight: 500; color:var(--text-main);">Gerente Uñas VIP</div>
+        </div>
+
+        <div class="dashboard-area">
+            <div class="header-title">
+                <h2>Control Neurálgico</h2>
+                <button class="btn-new" onclick="document.getElementById('modalCobro').style.display='flex'">Agendar Manicura</button>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card"><h4>Mesas Activas</h4><h3 style="color:var(--primary)">4 / 5</h3><span>A máxima capacidad</span></div>
+                <div class="metric-card"><h4>Retoques Hoy</h4><h3>8</h3><span>Clientas reincidentes</span></div>
+                <div class="metric-card" style="border-color: rgba(255,0,0,0.5);"><h4>Líquido Monómero</h4><h3 style="color:#ff4757;">Crítico</h3><span>Hacer pedido hoy</span></div>
+                <div class="metric-card"><h4>Ingresos Estimados</h4><h3>RD$ 12,400</h3><span style="color:var(--primary)">Flujo sano</span></div>
+            </div>
+
+            <div class="panel">
+                <h3>Agenda de Manicuristas - Vista Rápida</h3>
+                <table>
+                    <thead><tr><th>Clienta Reservada</th><th>Servicio Completo</th><th>Status del Trabajo</th></tr></thead>
+                    <tbody id="listaTickets">
+                        <tr><td>Laura P. (10:00 AM)</td><td>Set Acrílico + Gel en Pies</td><td><span style="background:rgba(255,0,127,0.2); color:var(--primary); padding:5px 10px; border-radius:20px; font-size:12px;">En Proceso (Mesa 2)</span></td></tr>
+                        <tr><td>Sofia M. (11:30 AM)</td><td>Retoque + Diseño 3D</td><td><span style="background:rgba(255,255,255,0.1); color:white; padding:5px 10px; border-radius:20px; font-size:12px;">En Sala de Espera</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalCobro" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 20px; font-family:'Outfit';">Apartar Mesa para Clienta</h3>
+            <label style="color:var(--text-muted); font-size:0.85rem;">Nombre (Busca en Clientas VIP)</label>
+            <input type="text" id="fakeClient" placeholder="Ej. Paola Gómez">
+            <label style="color:var(--text-muted); font-size:0.85rem;">Seleccionar Combo</label>
+            <select id="fakeService"><option>Manicura Rusa + Gel</option><option>Set Acrílico Nuevo</option><option>Remoción de Uñas</option></select>
+            <button class="btn-new" style="width: 100%; margin-top: 10px;" onclick="guardar()">Guardar Cita en Nube</button>
+            <button class="btn-new" style="width: 100%; margin-top: 10px; background: transparent; border: 1px solid var(--border); box-shadow:none; color: white;" onclick="document.getElementById('modalCobro').style.display='none'">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 1000);
+        function guardar() {
+            let n = document.getElementById('fakeClient').value || "Clienta Sin Nombre";
+            let s = document.getElementById('fakeService').value;
+            let t = document.createElement('tr');
+            t.innerHTML = `<td>${n} (Ahora)</td><td>${s}</td><td><span style="background:rgba(255,0,127,0.2); color:var(--primary); padding:5px 10px; border-radius:20px; font-size:12px;">Agenda Asignada</span></td>`;
+            document.getElementById('listaTickets').prepend(t);
+            document.getElementById('modalCobro').style.display='none';
+            alert("En la versión genuina instalada en tu equipo, esta cita le mandaría un recordatorio a la clienta por WhatsApp automáticamente.");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaPyme - Soluciones Informáticas del Futuro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #060913;
+            --surface-color: rgba(20, 24, 44, 0.6);
+            --border-color: rgba(0, 240, 255, 0.2);
+            --primary-accent: #00f0ff;
+            --secondary-accent: #6a00ff;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --glass-blur: 16px;
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Inter', sans-serif; scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden;
+            background-image: radial-gradient(circle at 15% 50%, rgba(106, 0, 255, 0.15) 0%, transparent 50%),
+                              radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.15) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Nav */
+        header {
+            position: fixed; top: 0; width: 100%; height: 100px; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 5%; background: rgba(6, 9, 19, 0.7); backdrop-filter: blur(var(--glass-blur));
+            border-bottom: 1px solid var(--border-color); z-index: 1000;
+        }
+        .logo-container { display: flex; align-items: center; gap: 20px; }
+        .logo-img { height: 75px; width: auto; border-radius: 12px; box-shadow: 0 0 30px rgba(0, 240, 255, 0.8); background: white; padding: 7px; }
+        .brand-name { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.8rem; background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav ul { display: flex; list-style: none; gap: 30px; }
+        nav ul li a { color: var(--text-main); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        nav ul li a:hover { color: var(--primary-accent); }
+
+        /* Hero */
+        .hero { position: relative; min-height: 80vh; display: flex; align-items: center; padding: 0 5%; margin-top: 80px; text-align: center; justify-content: center; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url("assets/bg_salon.png") no-repeat center center/cover; opacity: 0.15; z-index: -1; mask-image: linear-gradient(to bottom, black 40%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%); }
+        .hero-content { max-width: 800px; z-index: 1; margin: 0 auto; }
+        .hero h1 { font-family: 'Outfit', sans-serif; font-size: 4.5rem; line-height: 1.1; margin-bottom: 25px; font-weight: 800; }
+        .hero h1 span { color: var(--primary-accent); }
+        .hero p { font-size: 1.2rem; color: var(--text-muted); margin: 0 auto 40px; line-height: 1.6; max-width: 650px; }
+
+        /* General Sections */
+        .catalog { padding: 60px 5%; position: relative; }
+        .section-title { text-align: center; font-family: 'Outfit', sans-serif; font-size: 2.5rem; margin-bottom: 60px; color: white; }
+
+        /* Grid general de tarjetas */
+        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+
+        /* Opciones visuales base para tarjetas */
+        .card { background: var(--surface-color); border: 1px solid var(--border-color); padding: 40px 30px; border-radius: 16px; backdrop-filter: blur(var(--glass-blur)); text-align: center; transition: 0.4s; overflow: hidden; position: relative;}
+        .card:hover { transform: translateY(-10px); border-color: rgba(0, 240, 255, 0.5); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
+        .card-icon { font-size: 2.8rem; margin-bottom: 20px; }
+        .card h3 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 15px; color: white; }
+        .card p { color: var(--text-muted); line-height: 1.6; margin-bottom: 25px; }
+
+        /* Tarjetas de Precios Específicas */
+        .price-card { padding: 50px 30px; }
+        .price-card.featured { border-color: var(--primary-accent); background: linear-gradient(180deg, rgba(0, 240, 255, 0.05) 0%, rgba(20, 24, 44, 0.6) 100%); }
+        .price-card h3 { font-size: 1.8rem; margin-bottom: 10px; }
+        .price-card .price { font-size: 2.5rem; font-family: 'Outfit', sans-serif; color: var(--primary-accent); font-weight: bold; margin-bottom: 20px; }
+        .price-card ul { list-style: none; text-align: left; margin-bottom: 30px; }
+        .price-card ul li { color: var(--text-muted); margin-bottom: 12px; font-size: 0.95rem; }
+        .price-card ul li::before { content: '✔️'; color: var(--primary-accent); margin-right: 10px; font-size: 0.8rem; }
+        
+        /* Pasos (Cómo Funciona) */
+        .step-container { display: flex; justify-content: center; align-items: start; gap: 40px; margin-top: 40px; flex-wrap: wrap; }
+        .step { flex: 1; min-width: 250px; text-align: center; }
+        .step-number { width: 60px; height: 60px; background: linear-gradient(45deg, var(--secondary-accent), var(--primary-accent)); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-family: 'Outfit', font-weight: bold; color: white; margin: 0 auto 20px; box-shadow: 0 0 20px rgba(0, 240, 255, 0.4); }
+
+        .btn-primary { display: inline-block; padding: 14px 30px; background: linear-gradient(90deg, var(--secondary-accent), var(--primary-accent)); color: white; text-decoration: none; font-weight: 600; border-radius: 8px; border: none; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 20px rgba(0, 240, 255, 0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0, 240, 255, 0.5); }
+
+        /* FAQ Details Accordion */
+        details { background: var(--surface-color); border: 1px solid var(--border-color); padding: 20px; margin-bottom: 15px; border-radius: 12px; transition: all 0.3s ease; }
+        details[open] { border-color: var(--primary-accent); box-shadow: 0 5px 20px rgba(0, 240, 255, 0.1); }
+        summary { font-size: 1.2rem; color: white; font-weight: 600; cursor: pointer; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: '+'; color: var(--primary-accent); font-size: 1.5rem; }
+        details[open] summary::after { content: '-'; }
+
+        /* Footer */
+        footer { background: #03040a; border-top: 1px solid var(--border-color); text-align: left; padding: 60px 8% 20px; }
+        .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; margin-bottom: 40px; }
+        .footer-col h4 { color: white; margin-bottom: 15px; font-family: 'Outfit', sans-serif; font-size: 1.2rem; }
+        .footer-col p, .footer-col a { color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 8px; font-size: 0.95rem; transition: 0.3s; }
+        .footer-col a:hover { color: var(--primary-accent); }
+
+        /* Float WhatsApp */
+        .float-wa {
+            position: fixed; width: 60px; height: 60px; bottom: 40px; right: 40px;
+            background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center;
+            font-size: 30px; box-shadow: 0px 5px 20px rgba(37, 211, 102, 0.4);
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .float-wa:hover { transform: scale(1.1); box-shadow: 0px 8px 25px rgba(37, 211, 102, 0.6); }
+
+        /* Modal Full Screen */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content-wrapper { position: relative; width: 95%; max-width: 1200px; height: 90vh; border-radius: 20px; overflow: hidden; display: flex; box-shadow: 0 0 50px rgba(0, 240, 255, 0.2); border: 1px solid var(--border-color); }
+        .modal-bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-position: center; background-size: cover; z-index: 0; opacity: 0.5; transition: 0.4s ease; }
+        .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(6,9,19,0.95) 0%, rgba(6,9,19,0.4) 100%); z-index: 1; }
+        .close-modal { position: absolute; top: 20px; right: 25px; font-size: 2.5rem; color: white; cursor: pointer; z-index: 10; }
+        .modal-inner { position: relative; z-index: 2; display: flex; width: 100%; height: 100%; }
+        .modal-info { flex: 1.2; padding: 50px; display: flex; flex-direction: column; justify-content: center; }
+        .modal-info h2 { font-family: 'Outfit', sans-serif; font-size: 3.5rem; line-height: 1.1; color: white; margin-bottom: 20px; }
+        .modal-info h2 span { color: var(--primary-accent); }
+        .modal-info p { color: var(--text-muted); font-size: 1.2rem; line-height: 1.6; max-width: 90%; }
+        
+        .modal-form-area { flex: 1; padding: 40px; display: flex; align-items: center; justify-content: center; }
+        .glass-form { background: var(--surface-color); border: 1px solid var(--border-color); padding: 40px; border-radius: 16px; backdrop-filter: blur(25px); width: 100%; max-width: 450px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .glass-form h4 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: white; margin-bottom: 20px; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px; color: var(--text-muted); }
+        .form-group input { width: 100%; padding: 12px 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-family: 'Inter', sans-serif; }
+        .form-group input:focus { outline: none; border-color: var(--primary-accent); }
+        .row-2 { display: flex; gap: 15px; }
+        .row-2 .form-group { flex: 1; }
+        
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="assets/logo.png" class="logo-img" alt="NovaPyme">
+            <div class="brand-name">NOVA<span>PYME</span></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#comofunciona">Cómo Funciona</a></li>
+                <li><a href="#soluciones">Soluciones</a></li>
+                <li><a href="#precios">Precios</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Automatización <span>Inteligente</span> Pyme</h1>
+                <p>Nuestra plataforma te entrega el control total de tu negocio. Herramientas diseñadas a medida para incrementar tu rentabilidad sin complicaciones tecnológicas.</p>
+                <br>
+                <a href="#soluciones" class="btn-primary">Ver Catálogo de Servicios</a>
+            </div>
+        </section>
+
+        <!-- TAREA 6: SECCIÓN "CÓMO FUNCIONA" -->
+        <section id="comofunciona" class="catalog" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <h2 class="section-title">El camino a la automatización</h2>
+            <div class="step-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3 style="color:white; margin-bottom:10px; font-family:'Outfit', sans-serif;">Pide tu Demo</h3>
+                    <p style="color:var(--text-muted); font-size:0.95rem;">Selecciona tu rubro y llena el formulario de contacto para comenzar tus 7 días gratuitos de prueba, sin tarjetas de crédito.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3 style="color:white; margin-bottom:10px; font-family:'Outfit', sans-serif;">Instalación Remota</h3>
+                    <p style="color:var(--text-muted); font-size:0.95rem;">Un miembro de nuestro equipo técnico se conecta vía remota y deja nuestro software instalado y configurado en menos de 30 minutos.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3 style="color:white; margin-bottom:10px; font-family:'Outfit', sans-serif;">Controla todo</h3>
+                    <p style="color:var(--text-muted); font-size:0.95rem;">Observa en tiempo real tus citas, el inventario restante y cómo suben las ganancias directamente desde nuestro dashboard.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATALOGO -->
+        <section id="soluciones" class="catalog">
+            <h2 class="section-title">Nuestros Módulos</h2>
+            <div class="catalog-grid">
+                <div class="card">
+                    <div class="card-icon">💻</div>
+                    <h3>Beauty Cloud</h3>
+                    <p>Ideal para Salones de Belleza. Controla agenda, comisiones y mantén historial de químicos de tus clientas.</p>
+                    <button class="btn-primary" onclick="abrirModal('salon')">Prueba: Salón</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💈</div>
+                    <h3>Barber Track</h3>
+                    <p>Diseñado para Barberías. Sistema ultra rápido de tickets, manejo de turnos y venta de inventario.</p>
+                    <button class="btn-primary" onclick="abrirModal('barber')">Prueba: Barbería</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💅</div>
+                    <h3>Nail Center Pro</h3>
+                    <p>Control maestro para uñas. Agenda fácil de combos y alertas por escasez de esmaltes.</p>
+                    <button class="btn-primary" onclick="abrirModal('nails')">Prueba: Centro Uñas</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIOS (SOCIAL PROOF) -->
+        <section id="testimonios" class="catalog" style="border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <h2 class="section-title">Negocios de Éxito en R.D.</h2>
+            <div class="catalog-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="card" style="text-align: left; background: rgba(0,0,0,0.3);">
+                    <div style="color: #ffd700; font-size:1.5rem; margin-bottom:15px;">★★★★★</div>
+                    <p style="color: white; font-style: italic;">"Desde que implementamos NovaPyme, los descuadres de caja en la barbería bajaron a cero. El sistema me calcula las comisiones al final del día. Puedo irme a dormir tranquilo."</p>
+                    <h4 style="color: var(--primary-accent); margin-top: 20px;">Miguel A. - D'Boys BarberShop</h4>
+                </div>
+                <div class="card" style="text-align: left; background: rgba(0,0,0,0.3);">
+                    <div style="color: #ffd700; font-size:1.5rem; margin-bottom:15px;">★★★★★</div>
+                    <p style="color: white; font-style: italic;">"El control del inventario de uñas nos salvó. El sistema nos alerta a mi celular cuándo comprar acrílicos el día antes de que se acaben. El soporte es brutal."</p>
+                    <h4 style="color: var(--primary-accent); margin-top: 20px;">Laura S. - L&C Nail Bar</h4>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAREA 2: PRECIOS (PRICING TABLE) -->
+        <section id="precios" class="catalog">
+            <h2 class="section-title">Planes Transparentes</h2>
+            <div class="catalog-grid">
+                
+                <div class="card price-card">
+                    <h3>Evaluador</h3>
+                    <div class="price">Gratis</div>
+                    <p style="margin-bottom: 25px;">Para quienes desean probar la potencia del sistema antes de decidir.</p>
+                    <ul>
+                        <li>Licencia válida por 7 días.</li>
+                        <li>Soporte técnico básico vía WhatsApp.</li>
+                        <li>1 usuario administrador.</li>
+                        <li>Gestión limitada de agenda.</li>
+                    </ul>
+                    <button class="btn-primary" style="background: transparent; border: 1px solid var(--primary-accent); color: white; width:100%; box-shadow:none;" onclick="document.getElementById('soluciones').scrollIntoView();">Inicia tu Prueba</button>
+                </div>
+
+                <div class="card price-card featured">
+                    <h3 style="color: var(--primary-accent);">Plan Pro</h3>
+                    <div class="price">RD$ 2,500 <span style="font-size:1rem; color:var(--text-muted); font-weight:normal;">/mes</span></div>
+                    <p style="margin-bottom: 25px;">La mejor opción para la mayoría de salones y barberías en crecimiento.</p>
+                    <ul>
+                        <li>Licencia mensual activa 24/7.</li>
+                        <li>Soporte VIP Prioritario.</li>
+                        <li>Hasta 5 usuarios (Dueño y cajeros).</li>
+                        <li>Cálculos de inventario y planillas.</li>
+                        <li>Respaldo automático en nube.</li>
+                    </ul>
+                    <button class="btn-primary" style="width:100%;" onclick="document.getElementById('soluciones').scrollIntoView();">Activar Plan Pro</button>
+                </div>
+
+                <div class="card price-card">
+                    <h3>Corporativo</h3>
+                    <div class="price">A Medida</div>
+                    <p style="margin-bottom: 25px;">Para negocios con múltiples sucursales que exigen métricas masivas.</p>
+                    <ul>
+                        <li>Sistema escalable a N sucursales.</li>
+                        <li>Reportes analíticos mensuales.</li>
+                        <li>Usuarios ilimitados.</li>
+                        <li>Integración de WhatsApp para recordatorios.</li>
+                    </ul>
+                    <button class="btn-primary" style="background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); width:100%; box-shadow:none;" onclick="alert('Contacta al equipo de ventas para cotizar tu sucursal.');">Contactar Ventas</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FAQ (PREGUNTAS FRECUENTES) -->
+        <section id="faq" class="catalog" style="border-top: 1px solid rgba(255,255,255,0.05);">
+            <h2 class="section-title">Preguntas Frecuentes</h2>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <details>
+                    <summary>¿Qué pasa después de los 7 días de prueba gratis?</summary>
+                    <p style="color:var(--text-muted); margin-top:15px; line-height:1.6;">Una vez terminada la semana de prueba, nuestro equipo se contactará contigo para pasarte a nuestro bloque de mensualidad o pago anual. Todos los datos de tus clientes y ganancias seguirán intactos para que tu negocio no se frene.</p>
+                </details>
+                <details>
+                    <summary>¿Necesito capacitación para mí y mis empleados?</summary>
+                    <p style="color:var(--text-muted); margin-top:15px; line-height:1.6;">No necesitas saber nada de computadoras. Todo el sistema está programado para ser tan fácil de usar como WhatsApp. Igual, nuestro equipo técnico da una clase relámpago remota el primer día de tu instalación.</p>
+                </details>
+                <details>
+                    <summary>¿Qué pasa si se me va el internet o se daña la PC?</summary>
+                    <p style="color:var(--text-muted); margin-top:15px; line-height:1.6;">NovaPyme tiene opciones de respaldo automático. Si tu computadora se quema, tu información está envasada de forma protegida en nuestros servidores y podrás conectarte desde cualquier otra Tablet o PC al instante.</p>
+                </details>
+            </div>
+        </section>
+    </main>
+
+    <!-- MEJORA DEL FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col" style="max-width:300px;">
+                <h4 style="font-size:1.5rem; margin-bottom:20px;">Nova<span style="color:var(--primary-accent);">Pyme</span></h4>
+                <p>La plataforma tecnológica líder para la gestión y rentabilidad de microempresas y salones en República Dominicana.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navegación</h4>
+                <a href="#soluciones">Catálogo de Software</a>
+                <a href="#precios">Nuestros Precios</a>
+                <a href="# testimonios">Casos de Éxito</a>
+                <a href="#faq">Preguntas Frecuentes</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal / Corporativo</h4>
+                <a href="#">Términos y Condiciones</a>
+                <a href="#">Política de Privacidad</a>
+                <a href="#">Desarrollo a Medida</a>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <p>🏢 Santo Domingo, República Dominicana.</p>
+                <p>📩 soporte@novapyme.com</p>
+                <p>📞 +1 (809) 000-0000</p>
+            </div>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,0.1); text-align:center; padding-top:25px;">
+            <p>&copy; 2026 NovaPyme Inc. Todos los derechos registrados sobre la marca y el software.</p>
+        </div>
+    </footer>
+
+    <!-- BOTON FLOTANTE WHATSAPP -->
+    <a href="https://wa.me/18090000000" class="float-wa" target="_blank" title="Chatea con Soporte">
+        <svg viewBox="0 0 32 32" width="35" height="35" fill="white">
+            <path d="M16.1 2.9C8.8 2.9 2.9 8.8 2.9 16.1c0 2.4.6 4.6 1.7 6.6L3 29.1l6.6-1.7c1.9 1 4.1 1.6 6.5 1.6 7.3 0 13.2-5.9 13.2-13.2S23.4 2.9 16.1 2.9zM24 21.8c-.3.9-1.8 1.7-2.6 1.8-.8.1-1.8.3-3.6-.4-2.1-.8-4.5-2.8-5.7-4.4C10.9 17.2 9.8 15 9.8 13.2c0-1.8 1-2.7 1.4-3.2.4-.4.9-.5 1.2-.5h.9c.3 0 .7-.1 1.1.8.4 1 1.3 3.3 1.4 3.7.1.4.2.8-.1 1.2-.2.4-.4.6-.7.9-.3.3-.6.6-.9.9-.3.3-.6.6-.2 1.2.4.6 1.3 1.7 2.2 2.5 1.2 1 2.2 1.4 2.8 1.6.6.2 1 .2 1.4-.4.4-.6 1.7-2 2.2-2.7.4-.7 1-.6 1.6-.3 2.1 1 3.5 1.6 3.8 1.8s.6.3.7.5c.2.2.2 1 .1 1.9z"/>
+        </svg>
+    </a>
+
+    <!-- Ventana Modal de Prueba -->
+    <div id="trialModal" class="modal">
+        <div class="modal-content-wrapper">
+            <div id="modalBgImage" class="modal-bg-img"></div>
+            <div class="modal-overlay"></div>
+            <span class="close-modal" onclick="cerrarModal()">&times;</span>
+            <div class="modal-inner">
+                <div class="modal-info">
+                    <h2 id="modalTitle">Revoluciona tu <span>Negocio</span></h2>
+                    <p id="modalDesc">Dile adiós al caos. Implementa nuestra plataforma en tu empresa hoy mismo y asegura el crecimiento controlado de tus ganancias.</p>
+                </div>
+                <div class="modal-form-area">
+                    <div class="glass-form">
+                        <h4>Solicitar 7 Días Demo</h4>
+                        <div class="form-group"><label>Nombre de la Empresa o Pyme</label><input type="text" placeholder="Ej. D'Luis BarberShop" required></div>
+                        <div class="form-group"><label>Nombre Completo (Propietario)</label><input type="text" placeholder="Tu nombre" required></div>
+                        <div class="form-group"><label>Teléfono (WhatsApp)</label><input type="tel" placeholder="809-xxx-xxxx" required></div>
+                        <div class="row-2">
+                            <div class="form-group"><label>Ciudad</label><input type="text" placeholder="Ej. Distrito Nacional" required></div>
+                            <div class="form-group"><label>Provincia</label><input type="text" placeholder="Ej. Santo Domingo" required></div>
+                        </div>
+                        <div class="row-2">
+                            <div class="form-group"><label>Calle</label><input type="text" placeholder="Nombre de la calle" required></div>
+                            <div class="form-group"><label>Número Local</label><input type="text" placeholder="# Local" required></div>
+                        </div>
+                        <div class="form-group"><label>País</label><input type="text" value="República Dominicana" disabled style="background:rgba(0,0,0,0.5); cursor: not-allowed; color:#00f0ff; border-style:dashed;"></div>
+                        <button class="btn-primary" style="width: 100%; margin-top: 15px;" onclick="enviarFormulario()">Comenzar Prueba</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const bd = {
+            'salon': { tit: 'Revoluciona tu <span>Salón</span>', des: 'Administra tus estilistas, lleva el registro de los colores aplicados a tus clientas de confianza y mantén las cuentas perfectas al final del día.', img: 'url("assets/bg_salon.png")' },
+            'barber': { tit: 'Moderniza tu <span>Barbería</span>', des: 'Saca los tickets de corte más rápido, divide automáticamente las ganancias de la silla y controla tu inventario de productos.', img: 'url("assets/bg_barber.png")' },
+            'nails': { tit: 'Potencia tu <span>Nail Bar</span>', des: 'Agenda múltiple fluida. Lleva tus combos y paquetes organizados, y nunca te quedes sin esmaltes gracias al control de inventario.', img: 'url("assets/bg_salon.png")' }
+        };
+        function abrirModal(tipo) {
+            document.getElementById('modalTitle').innerHTML = bd[tipo].tit;
+            document.getElementById('modalDesc').innerText = bd[tipo].des;
+            document.getElementById('modalBgImage').style.backgroundImage = bd[tipo].img;
+            document.getElementById('trialModal').style.display = 'flex';
+        }
+        function cerrarModal() { document.getElementById('trialModal').style.display = 'none'; }
+        function enviarFormulario() { alert("¡Registro Exitoso! Los datos de tu Pyme han sido capturados."); cerrarModal(); }
+    </script>
+</body>
+</html>

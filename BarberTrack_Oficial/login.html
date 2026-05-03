@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barber Track - Ingreso de Personal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/theme.css">
+</head>
+<body class="bg-dark flex-center">
+
+    <div class="login-box glass-panel">
+        <h1 class="brand-logo">💈 Barber<span>Track</span></h1>
+        <p class="subtitle">SISTEMA OFICIAL DE BARBERÍA</p>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>PIN de Acceso</label>
+                <input type="password" id="userPin" placeholder="Ej. 1234" maxlength="4" required>
+            </div>
+            
+            <button type="submit" class="btn-primary w-100">Ingresar a Caja</button>
+        </form>
+        <p id="errorMsg" class="text-danger mt-15" style="display:none;">PIN Incorrecto. Intente de nuevo.</p>
+
+        <div class="test-note">
+            <small>⚠️ Modo Administrador Activo. Use el PIN: <strong>0000</strong></small>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (pre-cargado para cuando hagamos el switch) -->
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Lógica de la APP -->
+    <script src="js/db_emulator.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

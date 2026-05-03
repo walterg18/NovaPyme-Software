@@ -1,0 +1,35 @@
+# PLAN DE MEJORA Y DESARROLLO (FASES DE EJECUCIÓN)
+**Proyecto:** Barber Track Oficial 100% Pro
+**Objetivo:** Transformar el prototipo actual de caja registradora en un ERP (Sistema de Planificación de Recursos Empresariales) completo para salones de barbería.
+
+Para mantener la calidad y evitar errores en el sistema, ejecutaremos las mejoras paso a paso (Fase por Fase). Al completar una fase, probaremos que no tenga errores y pasaremos a la siguiente.
+
+---
+
+### FASE 1: REESTRUCTURACIÓN DE LA CAJA Y FINANZAS 💰
+*El motor de todo negocio es el flujo de dinero exacto.*
+- **Tarea 1.1:** Modificar la pantalla principal (`index.html`) para agregar un selector de "Método de Pago" (Efectivo, Tarjeta, Transferencia) al momento de cobrar.
+- **Tarea 1.2:** Crear un panel lateral de "Egresos" donde el cajero pueda restar gastos diarios (Ej. Compra de agua, detergente).
+- **Tarea 1.3:** Programar el algoritmo en `db_emulator.js` que no solo sume los tickets, sino que le calcule automáticamente un `% de comisión` al barbero y lo guarde en un informe individual.
+
+### FASE 2: GESTIÓN DE INVENTARIO AUTOMATIZADO 📦
+*Evitar el robo o descuadre de insumos del local.*
+- **Tarea 2.1:** Crear la pantalla `inventario.html`.
+- **Tarea 2.2:** Llenar la base de datos con los insumos estándar (Gel, Minoxidil, Navajas).
+- **Tarea 2.3:** Modificar `app.js` para que si en la "Caja" se cobra un "Servicio + Producto extra", la base de datos reste automáticamente "1 Minoxidil" y envíe una alerta visual en la pantalla si quedan menos de 5 frascos.
+
+### FASE 3: CRM DE CLIENTES Y SUS SECRETOS 👥
+*Brindar una experiencia VIP única a cada persona que se sienta en la silla.*
+- **Tarea 3.1:** Crear la pantalla `clientes.html`.
+- **Tarea 3.2:** Habilitar un buscador donde el cajero ingrese el teléfono y salga el "Perfil Médico" del cliente (Qué estilo de corte gusta, quién es su barbero favorito, etc.).
+- **Tarea 3.3:** Crear el algoritmo de "Pasaporte Digital": Que cuente cuántos tickets tiene el cliente y le dibuje un "Premio" dorado cuando llegue a 10 cortes.
+
+### FASE 4: MÓDULO DE AGENDA INTELIGENTE 📅
+*Organización visual estilo Google Calendar para cero errores.*
+- **Tarea 4.1:** Crear la pantalla `agenda.html` con un candendario visual responsivo.
+- **Tarea 4.2:** Programar los "Bloqueos de Silla" (Si Marcos VIP tiene un corte a las 2:00 PM de 45 mins, nadie más puede agendar con él de 2:00 PM a 2:45 PM).
+
+==================================================
+TÚ ERES EL DIRECTOR DEL PROYECTO:
+¿Autorizas formalmente este Plan de Mejora Fase por Fase? 
+Si tu respuesta es un "Sí" o "Dale", encenderé los motores y programaré de inmediato TODA la "FASE 1" en el código actual.

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beauty Cloud - Demo Interactivo</title>
+    <!-- Incluyendo fuentes y Chart.js para los gráficos de ventas -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-dark: #0f111a;
+            --sidebar-bg: #161a2b;
+            --surface: #1e2336;
+            --primary: #00f0ff;
+            --secondary: #6a00ff;
+            --text-main: #ffffff;
+            --text-muted: #8b95a5;
+            --border: #2a2f45;
+            --success: #25d366;
+            --danger: #ff4757;
+            --warning: #ffa502;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body { background-color: var(--bg-dark); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+
+        /* Pantalla de Carga Inicial para el Teatro */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-dark); z-index: 9999; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; transition: opacity 0.5s ease;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 4px solid var(--border);
+            border-top-color: var(--primary); border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 20px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px; background: var(--sidebar-bg); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; padding: 20px 0; transition: 0.3s;
+        }
+        .brand { font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; text-align: center; margin-bottom: 40px; color: white; display: flex; align-items: center; justify-content: center; gap:10px; }
+        .brand span { color: var(--primary); }
+        .brand img { width: 30px; }
+        
+        .nav-item {
+            padding: 15px 30px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 15px;
+            font-weight: 500; transition: background 0.3s, color 0.3s, border-left 0.3s; border-left: 3px solid transparent;
+        }
+        .nav-item:hover, .nav-item.active {
+            background: rgba(0, 240, 255, 0.05); color: var(--primary); border-left: 3px solid var(--primary);
+        }
+
+        /* Topbar */
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .topbar {
+            height: 80px; background: var(--bg-dark); border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 40px;
+        }
+        .search-bar { background: var(--surface); padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border); width: 300px; color: white; outline: none; }
+        .user-menu { display: flex; align-items: center; gap: 20px; }
+        .user-menu .avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(45deg, var(--primary), var(--secondary)); }
+
+        /* Contenido Central (Dashboard) */
+        .dashboard-area { padding: 40px; overflow-y: auto; flex: 1; }
+        .header-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .header-title h2 { font-family: 'Outfit', sans-serif; font-size: 2rem; }
+        .btn-new { background: var(--primary); color: #000; font-weight: 600; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,240,255,0.4); }
+        .btn-new:hover { background: white; transform: translateY(-2px); }
+
+        /* Grid de Métricas */
+        .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
+        .metric-card { background: var(--surface); border: 1px solid var(--border); padding: 25px; border-radius: 12px; }
+        .metric-card h4 { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px; font-weight: 500; }
+        .metric-card h3 { font-family: 'Outfit', sans-serif; font-size: 2.2rem; margin-bottom: 5px; }
+        .metric-card.positive .trend { color: var(--success); font-size: 0.85rem; font-weight: 600; }
+        .metric-card.negative .trend { color: var(--danger); font-size: 0.85rem; font-weight: 600; }
+
+        /* Panel Doble Inferior */
+        .panel-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 25px; }
+        .panel h3 { font-family: 'Outfit', sans-serif; margin-bottom: 20px; color: white; display: flex; justify-content: space-between; }
+        
+        /* Tabla de Citas */
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding-bottom: 15px; color: var(--text-muted); border-bottom: 1px solid var(--border); font-weight: 500; }
+        td { padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #ddd; }
+        .badge { padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .badge.pend { background: rgba(255, 165, 2, 0.2); color: var(--warning); border: 1px solid rgba(255,165,2,0.4); }
+        .badge.comp { background: rgba(37, 211, 102, 0.2); color: var(--success); border: 1px solid rgba(37,211,102,0.4); }
+
+        /* Mockup Vistas Falsas */
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Modal Inteligente Falso */
+        .sys-modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index: 5000; align-items:center; justify-content:center; }
+        .sys-modal-content { background: var(--surface); border: 1px solid var(--border); width: 450px; padding: 30px; border-radius: 16px; box-shadow: 0 10px 50px rgba(0,0,0,1); }
+        .sys-modal-content h3 { font-family:'Outfit'); font-size:1.5rem; margin-bottom:20px; border-bottom: 1px solid var(--border); padding-bottom:15px; }
+        .sys-form-group { margin-bottom: 15px; }
+        .sys-form-group label { display: block; font-size:0.85rem; color:var(--text-muted); margin-bottom: 5px; }
+        .sys-form-group input, .sys-form-group select { width: 100%; padding: 10px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 6px; color: white; }
+        .btn-group { display: flex; gap: 10px; margin-top: 25px; }
+        .btn-cancel { flex: 1; background: transparent; border: 1px solid var(--border); color: white; padding: 10px; border-radius: 6px; cursor:pointer; }
+        .btn-save { flex: 1; background: var(--primary); border: none; color: black; font-weight: bold; padding: 10px; border-radius: 6px; cursor:pointer; }
+
+        /* Notificacion Falsa (Toast) */
+        .toast { position: fixed; bottom: -100px; right: 30px; background: var(--success); color: black; padding: 15px 25px; border-radius: 8px; font-weight: 600; transition: 0.4s; z-index: 6000; }
+        .toast.show { bottom: 30px; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Pantalla de carga psicológica -->
+    <div id="loader">
+        <div class="spinner"></div>
+        <h3 style="font-family:'Outfit'; color:white; font-size:1.5rem;">Cargando Servidor de la Pyme...</h3>
+        <p style="color:var(--text-muted); margin-top:10px;">Verificando base de datos segura</p>
+    </div>
+
+    <!-- Barra lateral izquierda -->
+    <div class="sidebar">
+        <div class="brand">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="var(--primary)"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Beauty<span>Cloud</span>
+        </div>
+        <div class="nav-item active" onclick="cambiarVista('inicio')">📊 Panel Principal</div>
+        <div class="nav-item" onclick="cambiarVista('calendario')">📅 Agenda de Citas</div>
+        <div class="nav-item" onclick="cambiarVista('clientes')">👥 Mis Clientas</div>
+        <div class="nav-item" onclick="cambiarVista('inventario')">💅 Control Inventario</div>
+        <div class="nav-item" onclick="cambiarVista('finanzas')">💰 Cierre de Caja</div>
+    </div>
+
+    <!-- Contenido principal derecho -->
+    <div class="main-content">
+        <!-- Barra Superior -->
+        <div class="topbar">
+            <input type="text" class="search-bar" placeholder="Buscar clienta o teléfono...">
+            <div class="user-menu">
+                <span style="color:var(--text-muted); font-size:0.9rem;">📍 Sucursal: Naco</span>
+                <div class="avatar"></div>
+                <div style="font-weight: 500;">Lic. María (Admin)</div>
+            </div>
+        </div>
+
+        <!-- Área Dinámica -->
+        <div class="dashboard-area">
+            
+            <!-- VISTA 1: PANEL PRINCIPAL -->
+            <div id="vista-inicio" class="view-section active">
+                <div class="header-title">
+                    <h2>Resumen del Salón</h2>
+                    <button class="btn-new" onclick="abrirModalCita()">+ Nueva Cita</button>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card positive">
+                        <h4>Ingresos de Hoy</h4>
+                        <h3>RD$ 14,350</h3>
+                        <span class="trend">↑ 12% vs ayer</span>
+                    </div>
+                    <div class="metric-card negative">
+                        <h4>Citas Asistidas</h4>
+                        <h3>18</h3>
+                        <span class="trend">↓ 2 Canceladas</span>
+                    </div>
+                    <div class="metric-card positive">
+                        <h4>Comisiones Empleados</h4>
+                        <h3 style="color:var(--warning);">RD$ 4,200</h3>
+                        <span class="trend" style="color:var(--text-muted)">Calculado Automático</span>
+                    </div>
+                    <div class="metric-card negative">
+                        <h4>Inventario Crítico</h4>
+                        <h3 style="color:var(--danger)">3</h4>
+                        <span class="trend">Falta base y acrílico</span>
+                    </div>
+                </div>
+
+                <div class="panel-grid">
+                    <div class="panel">
+                        <h3>Gráfico de Crecimiento esta Semana</h3>
+                        <canvas id="myChart" height="100"></canvas>
+                    </div>
+                    <div class="panel">
+                        <h3>Citas Próximas (Hoy)</h3>
+                        <table>
+                            <thead><tr><th>Hora</th><th>Clienta</th><th>Estado</th></tr></thead>
+                            <tbody id="tablaCitas">
+                                <tr><td>03:00 PM</td><td>Ana Peralta (Balayage)</td><td><span class="badge pend">Esperando</span></td></tr>
+                                <tr><td>04:30 PM</td><td>Lucía Díaz (Manicura)</td><td><span class="badge pend">Esperando</span></td></tr>
+                                <tr><td>01:00 PM</td><td>Carmen Roa (Secado)</td><td><span class="badge comp">Cobrado</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA 2: CALENDARIO -->
+            <div id="vista-calendario" class="view-section">
+                <div class="header-title">
+                    <h2>Agenda Completa</h2>
+                    <button class="btn-new" onclick="abrirModalCita()">+ Nueva Cita</button>
+                </div>
+                <div class="panel" style="text-align: center; padding: 60px;">
+                    <h3 style="display:inline-block; margin-bottom: 15px;">Módulo de Agenda Semanal</h3>
+                    <p style="color:var(--text-muted); line-height:1.6; max-width: 600px; margin: 0 auto;">En el sistema real, aquí verás un calendario interactivo estilo Google Calendar donde puedes arrastrar las citas y asignar a tus especialistas. ¡Automatización total para tu recepcionista!</p>
+                </div>
+            </div>
+
+            <!-- VISTA INVENTARIO -->
+            <div id="vista-inventario" class="view-section">
+                <div class="header-title">
+                    <h2>Productos y Alertas</h2>
+                </div>
+                <div class="panel">
+                    <h3>Alertas Rojas de Almacén</h3>
+                    <table>
+                        <thead><tr><th>Producto</th><th>Marca</th><th>Cantidad Restante</th><th>Acción</th></tr></thead>
+                        <tbody>
+                            <tr><td>Tinte Rubio Cenizo (8.1)</td><td>L'Oréal</td><td style="color:var(--danger); font-weight:bold;">1 tubo</td><td>Comprar Urgente</td></tr>
+                            <tr><td>Acrílico Transparente</td><td>Mia Secret</td><td style="color:var(--danger); font-weight:bold;">1/4 envase</td><td>Comprar Urgente</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- LAS OTRAS VISTAS (Clientes, Finanzas) USAN PLANTILLAS GENÉRICAS PARA EL DEMO -->
+            <div id="vista-clientes" class="view-section">
+                <div class="header-title"><h2>Directorio de Clientas VIP</h2></div>
+                <div class="panel" style="padding: 50px; text-align:center;"><p style="color:white; font-size:1.2rem;">Aquí verás el historial de químicos de cada clienta para no quemarle el pelo jamás.</p></div>
+            </div>
+            <div id="vista-finanzas" class="view-section">
+                <div class="header-title"><h2>Cierre de Caja Intocable</h2></div>
+                <div class="panel" style="padding: 50px; text-align:center;"><p style="color:white; font-size:1.2rem;">Cuadre de tarjetas de crédito vs Efectivo. 0% Pérdidas, 100% Control.</p></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL FALSO DE NUEVA CITA -->
+    <div id="modalCita" class="sys-modal">
+        <div class="sys-modal-content">
+            <h3>Agendar Nueva Cita</h3>
+            <div class="sys-form-group"><label>Nombre de la Clienta</label><input type="text" id="fakeNombre" placeholder="Ej. Camila Reyes"></div>
+            <div class="sys-form-group"><label>Servicio a Realizar</label>
+                <select id="fakeServicio">
+                    <option>Lavado y Secado</option><option>Color y Highlights</option><option>Aplicación Acrílico</option>
+                </select>
+            </div>
+            <div class="sys-form-group"><label>Especialista Asignada</label>
+                <select><option>Karla (Pelo)</option><option>Marta (Uñas)</option></select>
+            </div>
+            <div class="btn-group">
+                <button class="btn-cancel" onclick="cerrarModalCita()">Cancelar</button>
+                <button class="btn-save" onclick="guardarCitaFalsa()">Guardar Cita</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICACION -->
+    <div id="notificacion" class="toast">✔️ Cita Registrada en la Nube</div>
+
+    <!-- SCRIPT DE INTERACTIVIDAD FINGIDA -->
+    <script>
+        // Simulador de Carga
+        setTimeout(() => {
+            document.getElementById('loader').style.opacity = '0';
+            setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
+        }, 1500);
+
+        // Navegación Sidebar
+        function cambiarVista(idVista) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('vista-' + idVista).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Simulación de Crear Cita que aparece en vivo
+        function abrirModalCita() { document.getElementById('modalCita').style.display = 'flex'; }
+        function cerrarModalCita() { document.getElementById('modalCita').style.display = 'none'; }
+        
+        function guardarCitaFalsa() {
+            let n = document.getElementById('fakeNombre').value || "Cliente Nuevo";
+            let s = document.getElementById('fakeServicio').value;
+            
+            // Insertar fila en la tabla para ilusionar al usuario
+            let tbody = document.getElementById('tablaCitas');
+            let tr = document.createElement('tr');
+            tr.innerHTML = `<td>05:00 PM</td><td>${n} (${s})</td><td><span class="badge pend">Esperando</span></td>`;
+            tbody.prepend(tr); // Ponerla de primera
+            
+            cerrarModalCita();
+            document.getElementById('fakeNombre').value = '';
+            
+            // Mostrar Toast Verde
+            let toast = document.getElementById('notificacion');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // ChartJS para gráfico de Crecimiento Visual Falso
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                datasets: [{
+                    label: 'Ganancias en miles de RD$',
+                    data: [8, 12, 10, 15, 23, 35],
+                    borderColor: '#00f0ff',
+                    backgroundColor: 'rgba(0, 240, 255, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { grid: { color: '#2a2f45' } },
+                    x: { grid: { color: 'transparent' } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    </script>
+</body>
+</html>

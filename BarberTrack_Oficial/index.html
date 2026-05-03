@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barber Track - Sistema Central</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/theme.css">
+    <!-- Scripts Base -->
+    <script src="js/auth.js"></script>
+    <script>verificarSeguridad();</script> 
+</head>
+<body class="bg-dark">
+
+    <div class="app-container">
+        <!-- BARRA LATERAL (MENÚ) -->
+        <aside class="sidebar">
+            <h2 class="brand-logo" style="font-size:1.5rem; text-align:center; margin-bottom: 40px;">💈 Barber<span>Track</span></h2>
+            
+            <div style="padding: 0 20px;">
+                <div class="form-group" style="cursor:pointer; background:rgba(0,255,136,0.1); padding: 15px; border-radius: 8px; border-left: 3px solid var(--primary);">
+                    <strong style="color:var(--primary);">Control de Caja</strong>
+                </div>
+                <!-- Futuros módulos -->
+                <div class="form-group" style="cursor:pointer; padding: 15px; border-radius: 8px; opacity:0.6; transition:0.3s;" onclick="window.location.href='inventario.html'" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+                    Inventario (Kardex)
+                </div>
+                <div class="form-group" style="cursor:pointer; padding: 15px; border-radius: 8px; color:var(--secondary);" onclick="cerrarSesion()">
+                    Cerrar Sesión
+                </div>
+            </div>
+        </aside>
+
+        <!-- PANEL CENTRAL -->
+        <main class="main-view">
+            <!-- NAVEGACIÓN SUPERIOR -->
+            <nav class="top-nav">
+                <h3 style="font-weight: 500; color:var(--text-muted);">Terminal Principal <span style="font-size:0.8rem; background:rgba(0,255,0,0.1); padding:4px 8px; border-radius:5px; margin-left:10px;">🟢 Conectado a Base de Datos</span></h3>
+                <div style="font-weight:bold;"><span id="userNameDisplay">Usuario</span></div>
+            </nav>
+
+            <!-- ESPACIO DE TRABAJO -->
+            <div class="view-area">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 30px;">
+                    <div>
+                        <h1 style="font-family:'Outfit'; font-size: 2.2rem;">Flujo de Caja - Hoy</h1>
+                        <p style="color:var(--text-muted); font-size:0.9rem;">Utilidad Neta (Casa): <span id="netaDisplay" style="color:var(--primary); font-weight:bold;">RD$ 0.00</span></p>
+                    </div>
+                    <div style="text-align:right;">
+                        <span style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Ingresos Brutos</span>
+                        <h2 id="totalCajaDisplay" style="color:var(--primary); font-size: 2.5rem;">RD$ 0.00</h2>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+                    <!-- PANEL IZQUIERDO: FORMULARIOS -->
+                    <div style="display:flex; flex-direction:column; gap:20px;">
+                        <!-- EMITIR TICKET -->
+                        <div class="glass-panel" style="padding: 25px;">
+                            <h3 style="margin-bottom: 20px; color:var(--primary);">+ Nuevo Ticket</h3>
+                            <form id="formCobro">
+                                <div class="form-group">
+                                    <label>Servicio Prestado</label>
+                                    <select id="inputServicio" required>
+                                        <option value="">Seleccione...</option>
+                                        <option value="Corte Sencillo">Corte Sencillo</option>
+                                        <option value="Corte + Barba">Corte + Barba</option>
+                                        <option value="Tinte / Diseño">Tinte / Diseño</option>
+                                        <option value="Limpieza Facial">Limpieza Facial</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Barbero que lo realizó</label>
+                                    <select id="inputBarbero" required>
+                                        <!-- Se llenará automático con la base de datos -->
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="border-left: 2px solid var(--secondary); padding-left:15px; background: rgba(255,51,102,0.05); border-radius: 8px; padding-top: 10px; padding-bottom: 5px;">
+                                    <label style="color:var(--secondary);">Venta Adicional (Opcional - Resta Stock)</label>
+                                    <select id="inputProductoExtra" style="margin-top:5px; border-color:var(--secondary);">
+                                        <!-- Productos desde la BD -->
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Método de Pago</label>
+                                    <select id="inputMetodo" required style="border-color:var(--primary);">
+                                        <option value="Efectivo">💵 Efectivo (Caja Fuerte)</option>
+                                        <option value="Tarjeta">💳 Tarjeta (Verifone)</option>
+                                        <option value="Transferencia">📱 Transferencia (Banco)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Monto Cobrado (RD$)</label>
+                                    <input type="number" id="inputMonto" placeholder="Ej. 500" required>
+                                </div>
+
+                                <button type="submit" class="btn-primary w-100">Registrar Pago</button>
+                            </form>
+                        </div>
+
+                        <!-- REGISTRAR EGRESO -->
+                        <div class="glass-panel" style="padding: 25px; border-color:var(--secondary);">
+                            <h3 style="margin-bottom: 20px; color:var(--secondary);">- Reportar Gasto</h3>
+                            <form id="formEgreso">
+                                <div class="form-group">
+                                    <label>Descripción del Gasto</label>
+                                    <input type="text" id="inputRazonGasto" placeholder="Ej. Pago de Luz Edesur" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Monto Gastado (RD$)</label>
+                                    <input type="number" id="inputMontoGasto" placeholder="Ej. 1000" required>
+                                </div>
+                                <button type="submit" class="btn-danger w-100">Registrar Salida de Dinero</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- PANEL DERECHO: LISTA DE FACTURACIÓN -->
+                    <div class="glass-panel" style="padding: 25px;">
+                        <h3 style="margin-bottom: 20px;">Historial de Cobros Recientes</h3>
+                        <div style="max-height: 400px; overflow-y:auto;">
+                            <table class="table-glass">
+                                <thead>
+                                    <tr>
+                                        <th>Hora</th>
+                                        <th>Detalle</th>
+                                        <th>Método</th>
+                                        <th>Reparto</th>
+                                        <th>Total Final</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaDeCobros">
+                                    <!-- Filas generadas por JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Motores JS -->
+    <script src="js/db_emulator.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+==========================================================
+PLAN DE ACCIÓN: CONSTRUCCIÓN DE LOS 3 DEMOS SIMULADORES
+==========================================================
+
+¡Nos sincronizamos por completo! Olvida por favor mis disculpas anteriores, acabo de comprender que el Simulador Interactivo (como el que vimos de Beauty Cloud) era EXACTAMENTE la maravilla visual que necesitabas para promocionar tus programas reales.
+
+Me has pedido construir **3 proyectos simuladores** completos en sus respectivas carpetas. Aquí está el esquema exacto de lo que voy a programar para que lo apruebes.
+
+## 1. Estructura de Carpetas a Fabricar:
+Voy a crear dentro de C:\NovaPyme las siguientes 3 carpetas:
+1. \demo_peluqueria\
+2. \demo_salon\
+3. \demo_unas\
+
+Dentro de cada carpeta crearé un archivo `index.html` independiente que contendrá la lógica y código visual del programa correspondiente. (El `demo_beautycloud.html` actual que hice lo borraré para usar esta nueva y perfecta estructura organizada).
+
+## 2. Personalización Visual de Cada Proyecto
+
+### A. Proyecto Salón (Beauty Cloud) -> demo_salon\index.html
+- **Métricas Falsas:** Ingresos, Citas Asistidas, Comisiones estimadas.
+- **Alertas Rojas:** Falta de Shampoos y Tintes L'Oréal.
+- **Interacción:** El modal de Nueva Cita permitirá escoger entre Secado, Corte Mantenimiento y Balance de Color.
+
+### B. Proyecto Peluquería (Barber Track) -> demo_peluqueria\index.html
+- **Métricas Falsas:** Tickets Diarios, Propinas Recaudadas (muy común en barberías), Venta Adicional de Artículos (Geles, Minoxidil).
+- **Tablero:** El diseño será con un tono un poco más rudo o urbano, como un panel verde neón.
+- **Interacción:** Simulación rápida de un Corte con Barba y Degradado.
+
+### C. Proyecto Centro de Uñas (Nail Center Pro) -> demo_unas\index.html
+- **Métricas Falsas:** Total de Manicuras, Tiempo Promedio de Silla, Puntos de Fidelidad Falsos de clientas VIP.
+- **Alertas Rojas:** Inventario bajo de Acrílicos y Líquido Monómero.
+- **Interacción:** Opciones para agendar retoques, esmaltado en gel o pedicura spa.
+
+## 3. Conexión del Router en la Página Principal
+Modificaré la página vendedora principal (que ya tenemos terminada en `C:\NovaPyme\index.html`). La programaré para que, cuando llenen el formulario:
+- Si le dieron a Salón, al darle a Enviar, abra automáticamente `demo_salon\index.html`.
+- Si le dieron a Peluquería, se teletransporte a `demo_peluqueria\index.html`.
+- Si le dieron a Uñas, lo lleve a `demo_unas\index.html`.
+
+==========================================================
+¿CÓMO PROCEDEMOS?
+Léete este archivo y, si te encanta la distribución y la estructura que propongo, confírmame por el chat. Inmediatamente comenzaré a crear los códigos de esas 3 grandiosas obras de software visual.
