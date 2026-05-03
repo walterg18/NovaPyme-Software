@@ -146,6 +146,31 @@
         .form-group input:focus { outline: none; border-color: var(--primary-accent); }
         .row-2 { display: flex; gap: 15px; }
         .row-2 .form-group { flex: 1; }
+
+        /* ROI Calculator */
+        .calculator-section { padding: 60px 5%; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .calc-container { background: rgba(20,24,44,0.8); border: 1px solid var(--primary-accent); max-width: 700px; margin: 0 auto; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,240,255,0.15); backdrop-filter: blur(10px); }
+        .calc-container h3 { font-family: 'Outfit', sans-serif; font-size: 2rem; margin-bottom: 15px; color: white; }
+        .calc-slider-wrap { margin: 30px 0; }
+        .calc-slider { width: 100%; cursor: pointer; accent-color: var(--primary-accent); }
+        .calc-result { font-family: 'Outfit', sans-serif; font-size: 3rem; color: #ff3b30; font-weight: 800; margin-top: 15px; text-shadow: 0 0 20px rgba(255,59,48,0.4); }
+        
+        /* Dashboard Showcase */
+        .showcase-section { padding: 80px 5%; text-align: center; position: relative; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .mac-window { background: #1a1c23; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); max-width: 1000px; margin: 0 auto; box-shadow: 0 20px 60px rgba(0,0,0,0.8); overflow: hidden; position: relative; }
+        .mac-header { background: #2d313a; padding: 12px 20px; display: flex; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .mac-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .mac-dot.red { background: #ff5f56; }
+        .mac-dot.yellow { background: #ffbd2e; }
+        .mac-dot.green { background: #27c93f; }
+        .mac-body img { width: 100%; height: auto; display: block; }
+        .showcase-tabs { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
+        .tab-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 10px 20px; border-radius: 30px; cursor: pointer; transition: 0.3s; font-weight: 600; }
+        .tab-btn.active { background: var(--primary-accent); color: black; border-color: var(--primary-accent); box-shadow: 0 0 15px rgba(0,240,255,0.4); }
+
+        /* Urgency Alert */
+        .urgency-alert { color: #ff3b30; font-size: 0.9rem; font-weight: bold; text-align: center; margin-bottom: 20px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
         
     </style>
 </head>
@@ -186,6 +211,42 @@
                 <h4>⌬ SalonManager</h4>
             </div>
         </div>
+
+        <!-- ROI CALCULATOR -->
+        <section class="calculator-section reveal">
+            <div class="calc-container">
+                <h3>¿Cuánto dinero estás perdiendo sin darte cuenta?</h3>
+                <p style="color:var(--text-muted);">Mueve la barra para indicar cuántos clientes atiendes al día. Calcularemos cuánto dinero dejas sobre la mesa mensualmente por citas cruzadas, olvidos e inventario perdido.</p>
+                <div class="calc-slider-wrap">
+                    <input type="range" min="5" max="100" value="20" class="calc-slider" id="clientesSlider">
+                    <p style="color:white; margin-top:10px; font-weight:bold;"><span id="clientesNum">20</span> clientes / día</p>
+                </div>
+                <p style="color:var(--text-muted); font-size:1.1rem;">Pérdida mensual estimada:</p>
+                <div class="calc-result">RD$ <span id="perdidaNum">12,000</span></div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD SHOWCASE -->
+        <section class="showcase-section reveal">
+            <h2 class="section-title" style="margin-bottom: 30px;">La Bestia por Dentro</h2>
+            <p style="color:var(--text-muted); max-width:600px; margin: 0 auto 40px;">No es solo una promesa. Así luce la interfaz real que controlarás desde cualquier dispositivo, con métricas exactas.</p>
+            
+            <div class="showcase-tabs">
+                <button class="tab-btn active" onclick="cambiarShowcase('salon')">Beauty Cloud (Salón)</button>
+                <button class="tab-btn" onclick="cambiarShowcase('barber')">Barber Track (Barbería)</button>
+            </div>
+
+            <div class="mac-window">
+                <div class="mac-header">
+                    <div class="mac-dot red"></div>
+                    <div class="mac-dot yellow"></div>
+                    <div class="mac-dot green"></div>
+                </div>
+                <div class="mac-body">
+                    <img src="assets/ui_dashboard_salon.png" id="showcaseImg" alt="Dashboard Preview">
+                </div>
+            </div>
+        </section>
 
         <!-- SECCIÓN "CÓMO FUNCIONA" -->
         <section id="comofunciona" class="catalog">
@@ -400,6 +461,7 @@
                 </div>
                 <div class="modal-form-area">
                     <div class="glass-form">
+                        <p class="urgency-alert">🔥 Por alta demanda, solo nos quedan 3 instalaciones gratuitas esta semana</p>
                         <h4>Agendar Tour de Sistema</h4>
                         <div class="form-group"><label>Nombre de la Empresa o Pyme</label><input type="text" placeholder="Ej. D'Luis BarberShop" required></div>
                         <div class="form-group"><label>Nombre Completo (Propietario)</label><input type="text" placeholder="Tu nombre" required></div>
@@ -445,6 +507,28 @@
             if (currentDemo === 'nails') carpetaPyme = 'demo_unas';
             
             window.location.href = carpetaPyme + '/index.html'; 
+        }
+
+        // Calculadora ROI
+        const slider = document.getElementById('clientesSlider');
+        const clientesNum = document.getElementById('clientesNum');
+        const perdidaNum = document.getElementById('perdidaNum');
+        
+        slider.addEventListener('input', function() {
+            const clientes = this.value;
+            clientesNum.innerText = clientes;
+            // Formula matemática de ejemplo: (clientes * 25 pesos) * 24 dias laborables
+            const perdida = (clientes * 25) * 24;
+            perdidaNum.innerText = perdida.toLocaleString('en-US');
+        });
+
+        // Dashboard Showcase Tab Switcher
+        function cambiarShowcase(tipo) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            const img = document.getElementById('showcaseImg');
+            if(tipo === 'salon') img.src = 'assets/ui_dashboard_salon.png';
+            if(tipo === 'barber') img.src = 'assets/ui_dashboard_barber.png';
         }
 
         // Mapeo e Interseccion Observer para Animaciones en Scroll
